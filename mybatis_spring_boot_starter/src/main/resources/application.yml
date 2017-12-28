@@ -1,0 +1,81 @@
+spring:
+  profiles:
+    active: dev
+---
+server:
+  port: 8088
+  context-path: /test
+
+security:
+  basic.enabled: false
+
+#mysql配置 druid连接池
+spring:
+  profiles: dev
+  output:
+    ansi:
+      enabled: detect #配置输出console的ide中的配色，并没有什么用
+  datasource:
+    url: jdbc:mysql://localhost/idea_dev?useSSL=false&serverTimezone=UTC
+    username: root
+    password: whuwjw2013
+    driver-class-name: com.mysql.jdbc.Driver
+    platform: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 下面为连接池的补充设置，应用到上面所有数据源中
+    # 初始化大小，最小，最大
+    initialSize: 1
+    minIdle: 3
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    # 合并多个DruidDataSource的监控数据
+    useGlobalDataSourceStat: true
+# mybatis配置
+mybatis:
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+---
+server:
+  port: 8009
+spring:
+  profiles: test
+---
+server:
+  port: 8008
+spring:
+  profiles: prod
+
+## server配置
+#server:
+#  port: 8088
+#  context-path: /test
+##  session-timeout: 30
+#  tomcat.max-threads: 0
+#  tomcat.uri-encoding: UTF-8
+
+
+
+
+
+#日志配置
+#logging:
+#  level:
+#    root: DEBUG
+#    com.enoch.studio.mapper: TRACE
+#  file: log.log
+#  config: classpath:logback-boot.xml
